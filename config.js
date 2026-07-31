@@ -21,7 +21,7 @@ window.SITE_CONFIG = {
   },
   "price": {
     "roomPerNight": 3500,
-    "mandap": 75000,
+    "mandap": 20000,
     "foodVeg": 450,
     "foodNonVeg": 650,
     "foodPerPlate": 550,
