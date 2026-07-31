@@ -102,13 +102,13 @@ textarea{resize:vertical;min-height:70px}
 
   <div class="card">
     <h2>Photos</h2>
-    <p class="hint">Upload a photo for each space (it's automatically resized). Or paste a public image link. Leave empty to keep the coloured placeholder.</p>
+    <p class="hint" style="color:#e0b43c">Photos are set inside the site file now — changing them here won't publish. To add or change a photo, send it to your developer.</p>
     <div id="imgFields"></div>
   </div>
 
   <div class="card">
     <h2>Gallery</h2>
-    <p class="hint">Add photos for the gallery section. Give each a caption and a category (used for the filter buttons).</p>
+    <p class="hint" style="color:#e0b43c">Gallery photos are set inside the site file now — adding them here won't publish. Send new gallery photos to your developer.</p>
     <div class="grid2">
       <div class="field"><label>Caption</label><input type="text" id="galCap" placeholder="e.g. Royal Flower Mandap"></div>
       <div class="field"><label>Category</label><input type="text" id="galCat" placeholder="e.g. Wedding" list="catlist">
@@ -312,8 +312,8 @@ function collect(){
   out.mapLink=$('#f_mapLink').value; out.mapEmbed=$('#f_mapEmbed').value; out.googleReviewLink=$('#f_googleReviewLink').value;
   out.offer={show:$('#offerShow').checked, text:$('#offerText').value};
   out.price=price;
-  out.images=images;
-  out.gallery=gallery;
+  delete out.images;   // photos live in index.html, never in config.js
+  delete out.gallery;  // (keeps this file small and safe)
   out.packages=packages.map((p,i)=>Object.assign({},p,{amt:($('#pkg_'+i)?$('#pkg_'+i).value:p.amt)}));
   out.bookedDates=parseDates('#f_booked'); out.reservedDates=parseDates('#f_reserved');
   return out;
