@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mahanadi Resort — Admin</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A1B16;--bg2:#0E2620;--surface:rgba(255,255,255,0.05);--surface2:rgba(255,255,255,0.09);
+  --text:#F3ECDC;--muted:#AEBEB2;--gold:#D4AF37;--goldb:#F0D68A;--line:rgba(212,175,55,0.22);--linef:rgba(255,255,255,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding-bottom:120px}
+h1,h2{font-family:'Cormorant Garamond',serif}
+a{color:var(--gold)}
+.bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--linef);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.bar .b-l{display:flex;align-items:center;gap:12px}
+.bar .mark{width:34px;height:34px}
+.bar b{font-family:'Marcellus',serif;letter-spacing:.5px;font-size:1.05rem}
+.bar b small{display:block;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+.bar .actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:100px;font-weight:600;font-size:.9rem;cursor:pointer;border:1px solid transparent;text-decoration:none}
+.btn-gold{background:linear-gradient(135deg,var(--goldb),var(--gold));color:#20160A}
+.btn-ghost{background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.wrap{max-width:840px;margin:0 auto;padding:26px 22px}
+.card{background:var(--surface);border:1px solid var(--linef);border-radius:16px;padding:24px;margin-bottom:20px}
+.card h2{font-size:1.5rem;margin-bottom:4px}
+.card .hint{color:var(--muted);font-size:.85rem;margin-bottom:18px}
+label{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin:0 0 6px}
+input,textarea,select{width:100%;background:var(--surface2);border:1px solid var(--linef);color:var(--text);border-radius:10px;padding:11px 13px;font-family:'Inter';font-size:.95rem;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:70px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.field{margin-bottom:14px}
+.switch{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.switch input{width:20px;height:20px;accent-color:var(--gold)}
+.switch label{margin:0;text-transform:none;letter-spacing:0;color:var(--text);font-size:.95rem}
+.img-row{display:flex;gap:16px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.thumb{width:130px;height:90px;border-radius:10px;border:1px solid var(--linef);background:#0d241d center/cover no-repeat;flex-shrink:0;display:grid;place-items:center;color:var(--muted);font-size:.7rem;text-align:center}
+.img-ctrls{flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px}
+.file-btn{display:inline-block;padding:9px 16px;border-radius:100px;background:var(--surface2);border:1px solid var(--line);color:var(--gold);font-size:.82rem;font-weight:600;cursor:pointer;text-align:center}
+.file-btn input{display:none}
+.mini{font-size:.8rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
+.gal-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:16px}
+.gal-tile{border-radius:10px;overflow:hidden;border:1px solid var(--linef);position:relative;aspect-ratio:4/3;background:#0d241d center/cover no-repeat}
+.gal-tile .x{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:.9rem}
+.gal-tile .cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);font-size:.66rem;padding:4px 6px}
+.savebar{position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--bg2);border-top:1px solid var(--line);padding:14px 22px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;align-items:center}
+.savebar .note{color:var(--muted);font-size:.82rem;max-width:420px}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(120px);z-index:50;background:var(--bg2);border:1px solid var(--gold);padding:12px 20px;border-radius:100px;transition:transform .35s;font-size:.9rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* gate */
+.gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:24px}
+.gate .box{max-width:360px;width:100%;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px}
+.gate h1{font-size:1.9rem;margin-bottom:6px}
+.gate p{color:var(--muted);font-size:.85rem;margin-bottom:18px}
+@media(max-width:620px){.grid2,.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- passcode gate -->
+<div class="gate" id="gate">
+  <div class="box">
+    <h1>Admin</h1>
+    <p>Enter the passcode to manage your site.</p>
+    <input type="password" id="gatePass" placeholder="Passcode" style="text-align:center;margin-bottom:12px" />
+    <button class="btn btn-gold" style="width:100%;justify-content:center" id="gateBtn">Unlock</button>
+    <p style="margin-top:14px;font-size:.72rem">Default passcode: <b>mahanadi2026</b> — change it inside admin.html.</p>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="b-l">
+    <svg class="mark" viewBox="0 0 48 48" fill="none"><path d="M24 4 L30 12 H18 Z" fill="#D4AF37"/><path d="M10 44 V22 Q24 10 38 22 V44" stroke="#D4AF37" stroke-width="2" fill="none"/></svg>
+    <b>Mahanadi<small>Admin Panel</small></b>
+  </div>
+  <div class="actions">
+    <a class="btn btn-ghost" href="index.html" target="_blank">Preview site ↗</a>
+    <button class="btn btn-gold" id="dlTop">Download config.js</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2>Offer banner</h2>
+    <p class="hint">The gold ribbon shown near the top of the home page. Turn it off when there's no promotion.</p>
+    <div class="switch"><input type="checkbox" id="offerShow"><label for="offerShow">Show the offer banner</label></div>
+    <div class="field"><label>Offer text</label><input type="text" id="offerText" placeholder="e.g. Monsoon special — 15% off weekday weddings"></div>
+  </div>
+
+  <div class="card">
+    <h2>Rates</h2>
+    <p class="hint">Numbers only — no ₹ symbol, no commas. These update the room/mandap/dining prices and the whole budget calculator.</p>
+    <div class="grid3" id="priceGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Photos</h2>
+    <p class="hint">Upload a photo for each space (it's automatically resized). Or paste a public image link. Leave empty to keep the coloured placeholder.</p>
+    <div id="imgFields"></div>
+  </div>
+
+  <div class="card">
+    <h2>Gallery</h2>
+    <p class="hint">Add photos for the gallery section. Give each a caption and a category (used for the filter buttons).</p>
+    <div class="grid2">
+      <div class="field"><label>Caption</label><input type="text" id="galCap" placeholder="e.g. Royal Flower Mandap"></div>
+      <div class="field"><label>Category</label><input type="text" id="galCat" placeholder="e.g. Wedding" list="catlist">
+        <datalist id="catlist"><option>Wedding</option><option>Décor</option><option>Rooms</option><option>Food</option><option>Reception</option><option>Drone</option></datalist>
+      </div>
+    </div>
+    <div class="img-row">
+      <label class="file-btn">Choose photo<input type="file" id="galFile" accept="image/*"></label>
+      <span style="color:var(--muted);font-size:.8rem">or</span>
+      <input type="text" id="galUrl" placeholder="paste image URL" style="flex:1;min-width:180px">
+      <button class="btn btn-ghost" id="galAdd">Add to gallery</button>
+    </div>
+    <div class="gal-list" id="galList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Business details</h2>
+    <div class="grid2">
+      <div class="field"><label>Resort name</label><input id="f_name"></div>
+      <div class="field"><label>Line under name</label><input id="f_brandLine"></div>
+      <div class="field"><label>Phone (no spaces)</label><input id="f_phone"></div>
+      <div class="field"><label>Phone (as shown)</label><input id="f_phoneDisplay"></div>
+      <div class="field"><label>Email</label><input id="f_email"></div>
+      <div class="field"><label>Opening hours</label><input id="f_hours"></div>
+      <div class="field" style="grid-column:1/-1"><label>Address</label><input id="f_address"></div>
+      <div class="field" style="grid-column:1/-1"><label>Map search text (for Directions)</label><input id="f_mapQuery"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Hero text</h2>
+    <div class="field"><label>Small tagline</label><input id="f_heroTag"></div>
+    <div class="field"><label>Big title</label><input id="f_heroTitle"></div>
+    <div class="field"><label>Intro paragraph</label><textarea id="f_heroLede" rows="3"></textarea></div>
+  </div>
+
+  <div class="card">
+    <h2>Availability</h2>
+    <p class="hint">One date per line, format YYYY-MM-DD (so 1 August 2026 = 2026-08-01). Booked dates show red on the calendar; reserved show amber.</p>
+    <div class="grid2">
+      <div class="field"><label>Booked dates (red)</label><textarea id="f_booked" rows="5" placeholder="2026-08-01"></textarea></div>
+      <div class="field"><label>Reserved dates (amber)</label><textarea id="f_reserved" rows="5" placeholder="2026-08-09"></textarea></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="savebar">
+  <span class="note">Changes aren't saved until you download and re-upload the file to your host.</span>
+  <button class="btn btn-gold" id="dlBottom">Download config.js</button>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script src="config.js"></script>
+<script>
+/* ══ change this passcode to your own ══ */
+const ADMIN_CODE = "mahanadi2026";
+
+const DEFAULTS={
+  name:"Mahanadi",brandLine:"Riverside Resort",
+  heroTag:"On the banks of the Mahanadi",heroTitle:"Mahanadi Resort",
+  heroLede:"A riverside destination in Odisha for weddings, receptions, birthdays and every celebration worth remembering.",
+  phone:"+919853909972",phoneDisplay:"+91 98539 09972",email:"hello@mahanadiresort.in",
+  address:"Mahanadi Riverfront Estate, Odisha, India",hours:"Every day · 9:00 AM – 9:00 PM",mapQuery:"Mahanadi Resort Odisha",
+  offer:{show:true,text:"✦ Monsoon special — 15% off weekday weddings ✦"},
+  price:{roomPerNight:3500,mandap:75000,foodVeg:450,foodNonVeg:650,foodPerPlate:550,flower:45000,photo:35000,dj:25000,stage:30000,cleaning:8000,defaultRooms:4,defaultPlates:150},
+  images:{rooms:"",mandap:"",dining:""},gallery:[],
+  bookedDates:["2026-08-01"],reservedDates:["2026-08-09"]
+};
+const cfg = Object.assign({}, DEFAULTS, window.SITE_CONFIG||{});
+cfg.price=Object.assign({},DEFAULTS.price,(window.SITE_CONFIG&&window.SITE_CONFIG.price)||{});
+cfg.offer=Object.assign({},DEFAULTS.offer,(window.SITE_CONFIG&&window.SITE_CONFIG.offer)||{});
+cfg.images=Object.assign({},DEFAULTS.images,(window.SITE_CONFIG&&window.SITE_CONFIG.images)||{});
+
+const $=s=>document.querySelector(s);
+let images=Object.assign({},cfg.images);
+let gallery=(cfg.gallery||[]).slice();
+
+/* ---- gate ---- */
+$('#gateBtn').onclick=()=>{ if($('#gatePass').value===ADMIN_CODE){$('#gate').style.display='none';} else {alert('Wrong passcode.');} };
+$('#gatePass').addEventListener('keydown',e=>{if(e.key==='Enter')$('#gateBtn').click();});
+
+/* ---- prices ---- */
+const priceFields=[['roomPerNight','Room / night'],['mandap','Mandap / event'],['foodVeg','Food veg / plate'],['foodNonVeg','Food non-veg / plate'],['foodPerPlate','Calc food / plate'],['flower','Flower décor'],['photo','Photo + video'],['dj','DJ & lighting'],['stage','LED stage'],['cleaning','Cleaning'],['defaultRooms','Calc: rooms'],['defaultPlates','Calc: plates']];
+$('#priceGrid').innerHTML=priceFields.map(([k,l])=>`<div class="field"><label>${l}</label><input type="number" id="price_${k}" value="${cfg.price[k]}"></div>`).join('');
+
+/* ---- images ---- */
+const imgFields=[['rooms','Rooms photo'],['mandap','Mandap photo'],['dining','Dining photo']];
+$('#imgFields').innerHTML=imgFields.map(([k,l])=>`
+  <div class="img-row">
+    <div class="thumb" id="thumb_${k}">${images[k]?'':'No photo'}</div>
+    <div class="img-ctrls">
+      <div><b style="color:var(--gold);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase">${l}</b></div>
+      <label class="file-btn">Upload photo<input type="file" accept="image/*" data-imgkey="${k}"></label>
+      <input type="text" placeholder="or paste image URL" data-imgurl="${k}" value="${(images[k]&&images[k].slice(0,5)!=='data:')?images[k]:''}">
+      <button class="mini" data-imgclear="${k}">Remove photo</button>
+    </div>
+  </div>`).join('');
+function paintThumb(k){const t=$('#thumb_'+k);if(images[k]){t.style.backgroundImage="url('"+images[k]+"')";t.textContent='';}else{t.style.backgroundImage='';t.textContent='No photo';}}
+imgFields.forEach(([k])=>paintThumb(k));
+
+/* resize + read a file to a compact JPEG data URL */
+function fileToDataURL(file,maxW,quality,cb){
+  const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+    let w=im.width,h=im.height; if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(im,0,0,w,h);
+    cb(c.toDataURL('image/jpeg',quality));
+  };im.src=r.result;};
+  r.readAsDataURL(file);
+}
+document.addEventListener('change',e=>{
+  const fk=e.target.getAttribute('data-imgkey');
+  if(fk&&e.target.files[0]){fileToDataURL(e.target.files[0],1400,.82,url=>{images[fk]=url;paintThumb(fk);toast('Photo added');});}
+});
+document.addEventListener('input',e=>{
+  const uk=e.target.getAttribute('data-imgurl');
+  if(uk!==null&&uk!==undefined){images[uk]=e.target.value.trim();paintThumb(uk);}
+});
+document.addEventListener('click',e=>{
+  const ck=e.target.getAttribute('data-imgclear');
+  if(ck){images[ck]='';const inp=document.querySelector('[data-imgurl="'+ck+'"]');if(inp)inp.value='';paintThumb(ck);}
+});
+
+/* ---- gallery ---- */
+function renderGallery(){
+  $('#galList').innerHTML=gallery.map((g,i)=>`
+    <div class="gal-tile" style="background-image:url('${g.url}')">
+      <button class="x" data-galx="${i}">✕</button>
+      <div class="cap">${g.caption||''}${g.category?(' · '+g.category):''}</div>
+    </div>`).join('') || '<span style="color:var(--muted);font-size:.85rem">No gallery photos yet.</span>';
+}
+renderGallery();
+let pendingGalUrl='';
+$('#galFile').addEventListener('change',e=>{ if(e.target.files[0]) fileToDataURL(e.target.files[0],1400,.82,url=>{pendingGalUrl=url;toast('Photo ready — click Add');}); });
+$('#galAdd').onclick=()=>{
+  const url=pendingGalUrl || $('#galUrl').value.trim();
+  if(!url){toast('Choose a photo or paste a URL first');return;}
+  gallery.push({url:url,caption:$('#galCap').value.trim(),category:$('#galCat').value.trim()||'Gallery'});
+  pendingGalUrl='';$('#galUrl').value='';$('#galCap').value='';$('#galFile').value='';
+  renderGallery();toast('Added to gallery');
+};
+document.addEventListener('click',e=>{const x=e.target.getAttribute('data-galx');if(x!==null&&x!==undefined){gallery.splice(+x,1);renderGallery();}});
+
+/* ---- prefill text fields ---- */
+['name','brandLine','phone','phoneDisplay','email','hours','address','mapQuery','heroTag','heroTitle','heroLede'].forEach(k=>{const el=$('#f_'+k);if(el)el.value=cfg[k]||'';});
+$('#offerShow').checked=!!cfg.offer.show;
+$('#offerText').value=cfg.offer.text||'';
+$('#f_booked').value=(cfg.bookedDates||[]).join('\n');
+$('#f_reserved').value=(cfg.reservedDates||[]).join('\n');
+
+/* ---- build + download ---- */
+function collect(){
+  const price={}; priceFields.forEach(([k])=>price[k]=Number($('#price_'+k).value)||0);
+  const parseDates=id=>$(id).value.split(/[\n,]/).map(s=>s.trim()).filter(Boolean);
+  return {
+    name:$('#f_name').value, brandLine:$('#f_brandLine').value,
+    heroTag:$('#f_heroTag').value, heroTitle:$('#f_heroTitle').value, heroLede:$('#f_heroLede').value,
+    phone:$('#f_phone').value, phoneDisplay:$('#f_phoneDisplay').value, email:$('#f_email').value,
+    address:$('#f_address').value, hours:$('#f_hours').value, mapQuery:$('#f_mapQuery').value,
+    offer:{show:$('#offerShow').checked, text:$('#offerText').value},
+    price:price,
+    images:{rooms:images.rooms||'',mandap:images.mandap||'',dining:images.dining||''},
+    gallery:gallery,
+    bookedDates:parseDates('#f_booked'), reservedDates:parseDates('#f_reserved')
+  };
+}
+function download(){
+  const data=collect();
+  const header="/* Mahanadi Resort — site content. Generated by admin.html.\n"+
+               "   Upload this file to your host (replace the old config.js). */\n";
+  const text=header+"window.SITE_CONFIG = "+JSON.stringify(data,null,2)+";\n";
+  const blob=new Blob([text],{type:'text/javascript'});
+  const u=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=u;a.download='config.js';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);
+  toast('config.js downloaded');
+}
+$('#dlTop').onclick=download;
+$('#dlBottom').onclick=download;
+
+/* ---- toast ---- */
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2400);}
+</script>
+</body>
+</html>
